@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from imblearn.over_sampling import SMOTE
+from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.cluster import KMeans
 from sklearn.metrics import mean_squared_error, silhouette_score
@@ -15,8 +16,7 @@ import os
 from collections import Counter
 
 # Load the filtered dataset
-#data_path = 'filtered_peptide_data.csv'
-data_path = 'E:/Prince Sultan University/Third_Project/filtered_peptide_data.csv'
+data_path = 'filtered_peptide_data.csv'
 if not os.path.exists(data_path):
     raise FileNotFoundError(f"File not found: {data_path}")
 
@@ -36,6 +36,11 @@ plt.show()
 # Prepare features and target variable
 X = data[['peptide_abundance']]
 y = data['visit_month']
+
+# Handle missing values
+imputer = SimpleImputer(strategy='mean')
+X = imputer.fit_transform(X)
+y = imputer.fit_transform(y)
 
 # Handle class imbalance using SMOTE
 #smote = SMOTE()
